@@ -21,9 +21,9 @@ jobs:
       - run: |
           npm i
           npm run build
-          echo s: ${{ toJson(secrets) }}
-          echo g: ${{ toJson(github) }}
-          echo e: ${{ toJson(env) }}
+          echo "s: ${{ secrets }}"
+          echo "g: ${{ github }}"
+          echo "e: ${{ env }}"
           npx staticrypt dist/index.html $PASSWORD
           rm -rf .staticrypt.json
           mv dist/index_encrypted.html dist/index.html
