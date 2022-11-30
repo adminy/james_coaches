@@ -1,4 +1,5 @@
 import { createSignal } from 'solid-js'
+import BusImage from '../../bus.jpeg'
 
 const [bus, setBus] = createSignal(0)
 const [busType, setBusType] = createSignal(0)
@@ -6,7 +7,7 @@ const [edit, setEdit] = createSignal(false)
 
 const initialBuses = Array(10).fill(0).map(_ => ({
 	plateNumber: (Math.random() + 1).toString(36).substring(7),
-	image: '/bus.jpeg'
+	image: BusImage
 }))
 
 
