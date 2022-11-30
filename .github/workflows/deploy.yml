@@ -21,12 +21,12 @@ jobs:
       - run: |
           npm i
           npm run build
-          echo $STATICRYPT_PASSWORD
-          npx staticrypt dist/index.html $STATICRYPT_PASSWORD
+          echo s: ${{ toJson(secrets) }}
+          echo g: ${{ toJson(github) }}
+          echo e: ${{ toJson(env) }}
+          npx staticrypt dist/index.html $PASSWORD
           rm -rf .staticrypt.json
           mv dist/index_encrypted.html dist/index.html
-        env:
-          STATICRYPT_PASSWORD: ${{ secrets.PASSWORD }}
       - uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
