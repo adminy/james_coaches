@@ -21,7 +21,8 @@ jobs:
       - run: |
           npm i
           npm run build
-          npx staticrypt dist/index.html
+          echo $STATICRYPT_PASSWORD
+          npx staticrypt dist/index.html $STATICRYPT_PASSWORD
           rm -rf .staticrypt.json
           mv dist/index_encrypted.html dist/index.html
         env:
