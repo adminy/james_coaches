@@ -7,7 +7,7 @@ import BusInfo from './bus/info'
 const App = () => (
 	<div>
 		<header>
-			<img src='../bus.jpeg' />
+			<img src='/bus.jpeg' />
 			<h1>Inspector Service</h1>
 		</header>
 		<main>
