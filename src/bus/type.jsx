@@ -1,8 +1,11 @@
 import { Show } from 'solid-js'
-import { busType, setBusType } from './state'
+import { busType, setBusType, busImages } from './state'
 
 const BusType = ({name}) => (
-	<h1 onClick={e => setBusType(name)}>{name}</h1>
+	<div onClick={e => setBusType(name)}>
+		<img src={busImages[name]} alt={name} width='100%' />
+		<h3>{name}</h3>
+	</div>
 )
 
 export default () => (

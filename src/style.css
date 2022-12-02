@@ -39,19 +39,23 @@ header img {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-wrap: wrap;
 }
 
-.bus_types h1 {
+.bus_types div {
 	margin: 0;
     padding: 0;
-    color: #000;
-	border: 3px solid #070d15;
-	width: 32vw;
-	height: 120px;
+    color: #070d15;
+	border: 1px solid #070d15;
+	width: 30%;
+	/* height: 160px; */
 	/* display: inline-block; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	border-radius: 8px;
+	flex-direction: column;
+	margin: 10px
 }
 
 .bus_header_button { width: 200px; padding: 10px; display: flex }
@@ -64,6 +68,7 @@ header img {
 }
 .bus_header_button:last-child button {
 	background: pink;
+	right: 0
 }
 .bus_header_button button:hover {
 	cursor: pointer;
@@ -102,7 +107,7 @@ header img {
 	border: 1px solid #070d15;
 	border-radius: 10px;
 	margin: 6px;
-
+	width: 25%
 }
 
 

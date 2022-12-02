@@ -3,13 +3,13 @@ import {edit, setEdit, resetBuses} from '../state'
 
 const [icon, setIcon] = createSignal('fas fa-plus-circle')
 
-export default () => (
+export default ({}) => (
 	<div class='bus_header_button'>
 		<Show when={edit()}>
 			<button onClick={e => {
 				setEdit(false)
 				resetBuses()
-			}} style='background: gray; font-size: 30px;margin-right: 80px'>
+			}} style='background: gray; font-size: 30px;margin-right: 50px'>
 				<i class="fas fa-broom"></i>
 			</button>
 		</Show>

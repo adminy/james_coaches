@@ -1,5 +1,5 @@
 import { Show } from 'solid-js'
-import { busType, bus, setBus, edit, buses, setBuses, resetBuses } from './state'
+import { busType, bus, setBus, edit, buses, setBuses, resetBuses, busImages } from './state'
 import BusHeader from './header'
 
 const onClickSelectBus = (busNo) => {
@@ -23,6 +23,7 @@ const EditBuses = () => (
 				plate.value = ''
 				img.value = ''
 			}}>Add Bus</button>
+			<br /><br /><br />
 		</div>
 	</Show>
 )
@@ -35,7 +36,7 @@ export default () => (
 			<div class='bus_list'>
 				{buses().map(({plateNumber, image}) => (
 					<div>
-						<img src={image} width='200' height='200' onClick={e => onClickSelectBus(plateNumber)} />
+						<img src={busImages[busType()]} width='100%' onClick={e => onClickSelectBus(plateNumber)} />
 						<h2 style='margin: 0; padding: 0' onClick={e => onClickSelectBus(plateNumber)}>{plateNumber}</h2>
 						<Show when={edit()}>
 							<button onClick={e => deleteBus(plateNumber)} style='float: right; font-size: 25px; width: 100%'>
@@ -44,9 +45,9 @@ export default () => (
 						</Show>
 					</div>
 				))}
-
-				<EditBuses />
 			</div>
 		</div>
+		<EditBuses />
+		<br /><br />
 	</Show>
 )

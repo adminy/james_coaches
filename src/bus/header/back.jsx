@@ -1,9 +1,10 @@
-import {setBus, setBusType, edit} from '../state'
+import {setBus, setBusType, edit, setReportPage} from '../state'
 
 const goBack = (page) => {
 	if (edit()) return alert('Make sure you save first!')
 	page === 'selectBus' && setBus(0)
 	page ==='selectBusType' && setBusType(0)
+	page === 'infoPage' && setReportPage(false)
 }
 
 export default ({page}) => (
