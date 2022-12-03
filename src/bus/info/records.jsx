@@ -6,18 +6,18 @@ const BusPastRecords = () => (
 	<div>
 		<table style='width:90%; margin: 20px'>
 			<thead>
-				<tr>{header.map(title => <th><span style='margin: 5px'>{title}</span></th>)}</tr>
+				<tr>{header.map(title => <th><span>{title}</span></th>)}</tr>
 			</thead>
 			<tbody>
 				{reports().map(({date, issues, inspectorName, miles}) => (
 					<tr>
-						<td><span style='margin: 5px'>{date}</span></td>
-						<td><span style='margin: 5px'>{inspectorName}</span></td>
-						<td><span style='margin: 5px'>{miles}</span></td>
-						<td><span style='margin: 5px'>{issues.length}</span></td>
-						<td><span style='margin: 5px'>{issues.map(({description}) => <span>{description}<br /></span>)}</span></td>
+						<td><span>{date}</span></td>
+						<td><span>{inspectorName}</span></td>
+						<td><span>{miles}</span></td>
+						<td><span>{issues.length}</span></td>
+						<td><span>{issues.map(({description}) => <span>{description}<br /></span>)}</span></td>
 						
-						<td><button class='button is-small is-info' style='margin: 5px' onClick={e => {
+						<td><button class='button is-small is-info' onClick={e => {
 							setReportPage({date, issues, inspectorName, miles})
 						}}>View</button></td>
 					</tr>

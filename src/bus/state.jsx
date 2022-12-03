@@ -23,10 +23,12 @@ let initialBuses = await Promise.resolve(
 
 const [buses, setBuses] = createSignal(initialBuses)
 
+const mainInspector = 'Iurie Bivol'
+
 const report = {
 	Operator: 'James Coaches',
 	'Odometer Reading': '123k miles',
-	'Name of Inspector': 'Iurie Bivol',
+	'Name of Inspector': mainInspector,
 	'Vehicle Reg/Fleet No': '12 D 1234',
 	'Vehicle Make/Model': 'Volvo Srinter',
 	Date: new Date().toISOString().split('T')[0].split('-').reverse().join(' / '),
@@ -114,22 +116,19 @@ const report = {
 
 const [reportPage, setReportPage] = createSignal(false)
 
-
 const [issues, setIssues] = createSignal([])
 const [miles, setMiles] = createSignal('')
-const [inspectorName, setInspectorName] = createSignal('Iurie Bivol')
+const [inspectorName, setInspectorName] = createSignal(mainInspector)
 
-const [reports, setReports] = createSignal([{
-	date: report.Date,
-	issues: [],
-	inspectorName: 'Iurie Bivol',
-	miles: '123k'
-}])
+const initialReports = await Promise.resolve([])
 
+const [reports, setReports] = createSignal(initialReports)
 
-const reportTypes = Object.entries(report).filter(([k, v]) => Array.isArray(v)).slice(0, -1)
+const reportTypes = Object.entries(report)
+	.filter(([_, errors]) => Array.isArray(errors)).slice(0, -1)
 
-const issueNumber = (i, j) => reportTypes.slice(0, i).map(x => x[1].length).reduce((a, b) => a + b, 0) + j
+const issueNumber = (i, j) => reportTypes.slice(0, i).map(x => x[1].length)
+	.reduce((a, b) => a + b, 0) + j
 
 
 export {

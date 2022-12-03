@@ -73,7 +73,8 @@ const ReportInfo = ({date, issues, inspectorName, miles}) => (
 			<Field key='Name of Inspector' value={inspectorName} />
 			<Field key='Date' value={date} />
 		</div>
-		{reportTypes.map(([checkLocation, errors], i) => <ReportBody {...{i, checkLocation, issues, errors}} />)}
+		{reportTypes.map(([checkLocation, errors], i) =>
+			<ReportBody {...{i, checkLocation, issues, errors}} />)}
 	</div>
 )
 

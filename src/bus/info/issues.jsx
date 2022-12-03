@@ -20,9 +20,9 @@ const updateIssueDesc = (e, index) => {
 	setIssues(issuez)
 }
 
-const IssueGroup = ({k, v, i, checkNo}) => (
-	<optgroup label = {k}>
-		{v.map((o, j) => {
+const IssueGroup = ({errorName, errors, i, checkNo}) => (
+	<optgroup label = {errorName}>
+		{errors.map((o, j) => {
 			const checkNum = issueNumber(i, j)
 			return <option selected={checkNo === checkNum && 'selected'}>{
 				`Check No: ${checkNum + 1} TM No: ${o['TM No.']}
@@ -36,7 +36,8 @@ const IssueOptions = ({index, checkNo}) => (
 		<div class="column is-four-fifths">
 			<div class="select">
 				<select onChange={e => changeIssueType(e, index)}>
-					{reportTypes.map(([k, v], i) => <IssueGroup {...{k, v, i, checkNo}} />)}
+					{reportTypes.map(([errorName, errors], i) =>
+						<IssueGroup {...{errorName, errors, i, checkNo}} />)}
 				</select>
 			</div>
 		</div>
@@ -50,7 +51,8 @@ const Issue = ({index, checkNo, description}) => (
 			<IssueOptions {...{index, checkNo}} />
 		</div>
 		<div class="row">
-			<textarea class="textarea" placeholder="Describe what you did ..." value={description} onChange={e => updateIssueDesc(e, index)} />
+			<textarea value={description} onChange={e => updateIssueDesc(e, index)}
+				class="textarea" placeholder="Describe what you did ..." />
 			<hr />
 		</div>
 	</div>

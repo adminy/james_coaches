@@ -31,8 +31,9 @@ const NewReport = () => (
 	<div class='rows' style='border: 1px solid #ccc; border-radius: 10px; margin: 20px'>
 		<div class='row has-text-centered title'>Add new Report</div>
 		<div class='row'>
-			<Field title='Inspector Name' placeholder='Inspector Name ...' name={inspectorName} setName={setInspectorName} />
-			<Field title='Miles' placeholder='123k' name={miles} setName={setMiles} />
+			<Field name={inspectorName} setName={setInspectorName}
+				title='Inspector Name' placeholder='Inspector Name ...' />
+			<Field name={miles} setName={setMiles} title='Miles' placeholder='123k' />
 			<br /><br />
 		</div>
 		<Issues />
