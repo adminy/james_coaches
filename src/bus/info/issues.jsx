@@ -1,8 +1,4 @@
-import { report, issues, setIssues } from '../state'
-
-const reportTypes = Object.entries(report).filter(([k, v]) => Array.isArray(v)).slice(0, -1)
-
-const issueNumber = (i, j) => reportTypes.slice(0, i).map(x => x[1].length).reduce((a, b) => a + b, 0) + j
+import { issueNumber, issues, setIssues, reportTypes } from '../state'
 
 const DeleteIssue = ({index}) => (
 	<div class='column'>

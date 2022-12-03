@@ -21,12 +21,7 @@ let initialBuses = await Promise.resolve(
 	}))
 )
 
-const [buses, setBuses] = createSignal([...initialBuses])
-
-const resetBuses = buses => {
-	initialBuses = buses
-	setBuses(initialBuses)
-}
+const [buses, setBuses] = createSignal(initialBuses)
 
 const report = {
 	Operator: 'James Coaches',
@@ -131,9 +126,15 @@ const [reports, setReports] = createSignal([{
 	miles: '123k'
 }])
 
+
+const reportTypes = Object.entries(report).filter(([k, v]) => Array.isArray(v)).slice(0, -1)
+
+const issueNumber = (i, j) => reportTypes.slice(0, i).map(x => x[1].length).reduce((a, b) => a + b, 0) + j
+
+
 export {
-	bus, setBus, busType, setBusType, edit, setEdit,
-	buses, setBuses, resetBuses, reportPage, setReportPage,
+	bus, setBus, busType, setBusType, edit, setEdit, reportTypes,
+	buses, setBuses, reportPage, setReportPage, issueNumber,
 	issues, setIssues, miles, setMiles, reports, setReports, 
 	inspectorName, setInspectorName, busImages, report
 }

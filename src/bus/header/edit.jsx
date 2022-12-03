@@ -1,5 +1,5 @@
-import { createSignal, Show } from 'solid-js'
-import {edit, setEdit, resetBuses, buses} from '../state'
+import { createSignal } from 'solid-js'
+import { edit, setEdit } from '../state'
 
 const [icon, setIcon] = createSignal('fas fa-plus')
 

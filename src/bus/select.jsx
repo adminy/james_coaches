@@ -1,5 +1,5 @@
 import { Show } from 'solid-js'
-import { busType, bus, setBus, edit, buses, setBuses, resetBuses, busImages } from './state'
+import { busType, bus, setBus, edit, buses, setBuses, busImages } from './state'
 import BusHeader from './header'
 
 const deleteBus = busNo => {

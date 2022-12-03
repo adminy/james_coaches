@@ -1,8 +1,6 @@
 import {Show} from 'solid-js'
-import {reportPage, busType, bus, report} from './state'
+import {reportPage, busType, bus, reportTypes, issueNumber} from './state'
 import GoBack from './header/back'
-
-const reportTypes = Object.entries(report).filter(([k, v]) => Array.isArray(v)).slice(0, -1)
 
 const Field = ({key, value}) => (
 	<div class='column'>
@@ -21,6 +19,44 @@ const Field = ({key, value}) => (
 	</div>
 )
 
+const ReportBody = ({checkLocation, i, errors, issues}) => (
+	<div>
+		<div class='subtitle'>{String.fromCharCode('A'.charCodeAt() + i)}: {checkLocation}</div>
+		<table style='width:90%; margin: 20px'>
+		<thead>
+			<tr>{[
+				'Check No',
+				'TM No.',
+				'Item Inspected',
+				<span>
+					Condition <br />
+					<i class="fas fa-check"></i> or
+					<i class="fas fa-times" />
+				</span>,
+				'Description of Defect',
+				'Rectified By'
+			].map(title => <th><span>{title}</span></th>)}</tr>
+		</thead>
+		<tbody>
+			{errors.map((o, j) => {
+				const checkNo = issueNumber(i, j)
+				return <tr>
+				<td><span>{checkNo + 1}</span></td>
+				<td><span>{o['TM No.']}</span></td>
+				<td><span>{o['Item Inspected']}</span></td>
+				<td><span>{issues.find(issue => issue.checkNo === checkNo) ? 
+					<i class="fas fa-times" /> :
+					<i class="fas fa-check"></i>
+				}</span></td>
+				<td><span>{issues.find(issue => issue.checkNo === checkNo)?.description || ''}</span></td>
+				<td><span></span></td>
+			</tr>
+			})}
+		</tbody>
+	</table>
+</div>
+)
+
 const ReportInfo = ({date, issues, inspectorName, miles}) => (
 	<div style='margin: 20px'>
 
@@ -37,29 +73,7 @@ const ReportInfo = ({date, issues, inspectorName, miles}) => (
 			<Field key='Name of Inspector' value={inspectorName} />
 			<Field key='Date' value={date} />
 		</div>
-				{reportTypes.map(([checkLocation, v], i) => (
-					<div>
-						<div class='subtitle'>{String.fromCharCode('A'.charCodeAt() + i)}: {checkLocation}</div>
-						<table style='width:90%; margin: 20px'>
-						<thead>
-							<tr>{['Check No', 'TM No.', 'Item Inspected', <span>Condition <br /> <i class="fas fa-check"></i> or <i class="fas fa-times" /></span>, 'Description of Defect', 'Rectified By'].map(title => <th><span style='margin: 5px'>{title}</span></th>)}</tr>
-						</thead>
-						<tbody>
-							{v.map((o, j) => {
-								const checkNo = reportTypes.slice(0, i).map(x => x[1].length).reduce((a, b) => a + b, 0) + j
-								return <tr>
-								<td><span style='margin: 5px'>{checkNo + 1}</span></td>
-								<td><span style='margin: 5px'>{o['TM No.']}</span></td>
-								<td><span style='margin: 5px'>{o['Item Inspected']}</span></td>
-								<td><span style='margin: 5px'>{issues.find(issue => issue.checkNo === checkNo) ?  <i class="fas fa-times" /> : <i class="fas fa-check"></i>}</span></td>
-								<td><span style='margin: 5px'>{issues.find(issue => issue.checkNo === checkNo)?.description || ''}</span></td>
-								<td><span style='margin: 5px'></span></td>
-							</tr>
-							})}
-						</tbody>
-					</table>
-				</div>
-				))}
+		{reportTypes.map(([checkLocation, errors], i) => <ReportBody {...{i, checkLocation, issues, errors}} />)}
 	</div>
 )
 

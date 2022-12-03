@@ -130,6 +130,7 @@ header img {
 table, th, td {
 	border:1px solid #070d15;
 }
+td > span, th > span { margin: 5px }
 
 .submit-button { position: absolute; right: 0; margin: 10px; top: 0 }
 

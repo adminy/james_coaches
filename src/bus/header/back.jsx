@@ -1,4 +1,4 @@
-import {setBus, setBusType, edit, setReportPage} from '../state'
+import {setBus, setBusType, setReportPage} from '../state'
 
 const goBack = (page) => {
 	page === 'selectBus' && setBus(0)
