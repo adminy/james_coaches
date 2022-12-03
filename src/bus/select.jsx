@@ -30,7 +30,7 @@ const EditBuses = () => (
 			<input placeholder='Bus Plate Number' class='input is-large' /><br />
 			<button class='input is-large has-background-info has-text-white add_bus' onClick={e => {
 				const div = e.currentTarget.parentElement
-				const select = div.firstChild.firstChild.firstChild.firstChild
+				const select = div.firstChild.firstChild.childNodes[1].firstChild
 				const category = select.options[select.selectedIndex].textContent
 				const model = div.childNodes[2]
 				const plate = div.childNodes[3]
