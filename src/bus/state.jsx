@@ -1,6 +1,4 @@
 import { createSignal } from 'solid-js'
-import BusImage from '../../assets/bus.jpeg'
-
 import CoachImg from '../../assets/coach.png'
 import DoubleDeckerImg from '../../assets/doubledecker.png'
 import MinibusImg from '../../assets/minibus.png'
@@ -15,17 +13,19 @@ const [bus, setBus] = createSignal(0)
 const [busType, setBusType] = createSignal(0)
 const [edit, setEdit] = createSignal(false)
 
-const initialBuses = Array(4).fill(0).map(_ => ({
-	plateNumber: (Math.random() + 1).toString(36).substring(7),
-	image: BusImage
-}))
-
+let initialBuses = await Promise.resolve(
+	Array(3).fill(0).map((_, i) => ({
+		plateNumber: (Math.random() + 1).toString(36).substring(7),
+		model: ['Volvo', 'Volkswagen'][Math.random() < 0.5 ? 0 : 1],
+		category: ['Coaches', 'Double Decker', 'Mini Bus'][i]
+	}))
+)
 
 const [buses, setBuses] = createSignal([...initialBuses])
 
-const resetBuses = () => {
+const resetBuses = buses => {
+	initialBuses = buses
 	setBuses(initialBuses)
-	// actually just re-fetch the list of buses
 }
 
 const report = {
@@ -117,12 +117,23 @@ const report = {
 	LastNote: 'The Above signatory must be a suitably Qualified Person'
 }
 
-const [busEntries, setBusEntries] = createSignal([])
-
 const [reportPage, setReportPage] = createSignal(false)
+
+
+const [issues, setIssues] = createSignal([])
+const [miles, setMiles] = createSignal('')
+const [inspectorName, setInspectorName] = createSignal('Iurie Bivol')
+
+const [reports, setReports] = createSignal([{
+	date: report.Date,
+	issues: [],
+	inspectorName: 'Iurie Bivol',
+	miles: '123k'
+}])
 
 export {
 	bus, setBus, busType, setBusType, edit, setEdit,
-	buses, setBuses, resetBuses, busEntries, setBusEntries,
-	busImages, report, reportPage, setReportPage
+	buses, setBuses, resetBuses, reportPage, setReportPage,
+	issues, setIssues, miles, setMiles, reports, setReports, 
+	inspectorName, setInspectorName, busImages, report
 }

@@ -63,7 +63,7 @@ header img {
 	font-size: 3rem;
     border: 3px solid #070d15;
 	background: wheat;
-    border-radius: 50px;
+    border-radius: 15px;
 	height: 68px;
 }
 .bus_header_button:last-child button {
@@ -102,17 +102,46 @@ header img {
 
 }
 
-.bus_list div {
-	padding: 20px;
+.bus_list > div {
+	position: relative;
 	border: 1px solid #070d15;
 	border-radius: 10px;
 	margin: 6px;
 	width: 25%
 }
 
+.bus_list > div > button {
+	position: absolute;
+	color: red;
+	right: 3px;
+	top: 3px;
+	z-index: 99;
+}
+
+.bus_list > div > img {
+	position: relative;
+	width: 100%;
+}
+
+.bus_list > div > div { margin: 0; padding: 0; 	z-index: 99; position: relative }
+
+.add_bus { position: absolute;width: 188px;right:0;margin: 5px }
 
 table, th, td {
 	border:1px solid #070d15;
+}
+
+.submit-button { position: absolute; right: 0; margin: 10px; top: 0 }
+
+.submit-button:hover {
+	border: 1px solid limegreen;
+	background-color: black;
+	animation: pulse 2s infinite
+}
+
+.submit-button:hover i, .submit-button:hover span {
+	color: white;
+	font-size: 130%;
 }
 
 @keyframes pulse {

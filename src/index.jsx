@@ -11,7 +11,7 @@ const App = () => (
 	<div>
 		<header>
 			<h1>Inspector Service</h1>
-			<img src={BusImage} height='120' />
+			<img src={BusImage} style='height:70px' />
 		</header>
 		<main>
 			<BusTypes />
