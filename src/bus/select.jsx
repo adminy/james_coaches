@@ -1,6 +1,7 @@
 import { Show } from 'solid-js'
-import { busType, bus, setBus, edit, buses, setBuses, busImages } from './state'
+import { busType, bus, setBus, edit, buses, setBuses, busImages, setReports, mainInspector } from './state'
 import BusHeader from './header'
+import {records} from '../../.data.json'
 
 const deleteBus = busNo => {
 	setBuses(buses().filter(({plateNumber}) => plateNumber !== busNo))
@@ -69,7 +70,13 @@ export default () => (
 			<BusHeader title={busType()} page='selectBusType' />
 			<div class='bus_list'>
 				{buses().filter(b => b.category === busType())
-					.map(bus => <BusBlock  {...bus} onClick={e => setBus(bus.plateNumber)} />)}
+					.map(bus => <BusBlock  {...bus} onClick={e => {
+						setBus(bus.plateNumber)
+						setReports(
+							records.map(({plateNumber, miles, date}) => ({plateNumber, date, issues: [], inspectorName: mainInspector, miles}))
+							.filter(b => b.plateNumber === bus.plateNumber)
+						)
+					}} />)}
 			</div>
 			<br /><br /><br />
 			<EditBuses />

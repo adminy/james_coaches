@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js'
 import CoachImg from '../../assets/coach.png'
 import DoubleDeckerImg from '../../assets/doubledecker.png'
 import MinibusImg from '../../assets/minibus.png'
+import {categories} from '../../.data.json'
 
 const busImages = {
 	Coaches: CoachImg,
@@ -14,16 +15,12 @@ const [busType, setBusType] = createSignal(0)
 const [edit, setEdit] = createSignal(false)
 
 let initialBuses = await Promise.resolve(
-	Array(3).fill(0).map((_, i) => ({
-		plateNumber: (Math.random() + 1).toString(36).substring(7),
-		model: ['Volvo', 'Volkswagen'][Math.random() < 0.5 ? 0 : 1],
-		category: ['Coaches', 'Double Decker', 'Mini Bus'][i]
-	}))
+	Object.entries(categories).map(([category, buses]) => buses.map(({plateNumber, model, seats}) => ({plateNumber, model, seats, category}))).flat()
 )
 
 const [buses, setBuses] = createSignal(initialBuses)
 
-const mainInspector = 'Iurie Bivol'
+export const mainInspector = 'Iurie Bivol'
 
 const report = {
 	Operator: 'James Coaches',
@@ -120,7 +117,9 @@ const [issues, setIssues] = createSignal([])
 const [miles, setMiles] = createSignal('')
 const [inspectorName, setInspectorName] = createSignal(mainInspector)
 
-const initialReports = await Promise.resolve([])
+const initialReports = await Promise.resolve(
+	[]
+)
 
 const [reports, setReports] = createSignal(initialReports)
 
