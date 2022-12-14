@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bulma": "^0.9.4",
+    "local-storage-proxy": "^4.0.3",
     "solid-js": "^1.5.1"
   }
 }

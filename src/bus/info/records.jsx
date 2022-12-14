@@ -1,6 +1,6 @@
 import { setReportPage, reports } from '../state'
 
-const header = ['Date', 'Checked By', 'Miles', 'Issues', 'Info', 'View Report']
+const header = ['Date', 'Checked By', 'Miles', /*'Issues'*/, 'Info'/*, 'View Report'*/]
 
 const BusPastRecords = () => (
 	<div>
@@ -14,12 +14,12 @@ const BusPastRecords = () => (
 						<td><span>{date}</span></td>
 						<td><span>{inspectorName}</span></td>
 						<td><span>{miles}</span></td>
-						<td><span>{issues.length}</span></td>
-						<td><span>{issues.map(({description}) => <span>{description}<br /></span>)}</span></td>
+						{/* <td><span>{issues.length}</span></td> */}
+						<td><span>{issues.map((description) => <span>{description}<br /></span>)}</span></td>
 						
-						<td><button class='button is-small is-info' onClick={e => {
+						{/* <td><button class='button is-small is-info' onMouseDown={e => {
 							setReportPage({date, issues, inspectorName, miles})
-						}}>View</button></td>
+						}}>View</button></td> */}
 					</tr>
 				))}
 			</tbody>

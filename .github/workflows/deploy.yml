@@ -19,7 +19,7 @@ jobs:
           path: node_modules
           key: node-modules-${{ hashFiles('package.json') }}
       - run: |
-          echo '${{ secrets.DATA }}' > .data.json
+          echo '${{ secrets.DATA }}' > categories.json
           npm i
           npm run build
           npx staticrypt dist/index.html ${{ secrets.PASS }}

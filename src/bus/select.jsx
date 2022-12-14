@@ -1,7 +1,6 @@
 import { Show } from 'solid-js'
-import { busType, bus, setBus, edit, buses, setBuses, busImages, setReports, mainInspector } from './state'
+import { busType, bus, setBus, edit, buses, setBuses, busImages, setReports, state } from './state'
 import BusHeader from './header'
-import {records} from '../../.data.json'
 
 const deleteBus = busNo => {
 	setBuses(buses().filter(({plateNumber}) => plateNumber !== busNo))
@@ -29,7 +28,7 @@ const EditBuses = () => (
 			
 			<input placeholder='Bus Model' class='input is-large' /><br />
 			<input placeholder='Bus Plate Number' class='input is-large' /><br />
-			<button class='input is-large has-background-info has-text-white add_bus' onClick={e => {
+			<button class='input is-large has-background-info has-text-white add_bus' onMouseDown={e => {
 				const div = e.currentTarget.parentElement
 				const select = div.firstChild.firstChild.childNodes[1].firstChild
 				const category = select.options[select.selectedIndex].textContent
@@ -48,7 +47,7 @@ const DeleteBusButton = ({category, model, plateNumber}) => {
 	const deleteText = `Are you sure you want to delete ${category} ${model} - ${plateNumber}?`
 	return (
 		<Show when={edit()}>
-			<button onClick={e => window.confirm(deleteText) && deleteBus(plateNumber)} class='button'>
+			<button onMouseDown={e => window.confirm(deleteText) && deleteBus(plateNumber)} class='button'>
 				<i class="fas fa-times"></i>
 			</button>
 		</Show>
@@ -58,9 +57,9 @@ const DeleteBusButton = ({category, model, plateNumber}) => {
 const BusBlock = ({category, model, plateNumber, onClick}) => (
 	<div>
 		<DeleteBusButton {...{plateNumber, category, model}} />
-		<img src={busImages[category]} width='100%' onClick={onClick} />
-		<div class='subtitle' onClick={onClick}>{model}</div>
-		<div class='subtitle' onClick={onClick}>{plateNumber}</div>
+		<img src={busImages[category]} width='100%' onMouseDown={onClick} />
+		<div class='subtitle' onMouseDown={onClick}>{model}</div>
+		<div class='subtitle' onMouseDown={onClick}>{plateNumber}</div>
 	</div>
 )
 
@@ -70,12 +69,9 @@ export default () => (
 			<BusHeader title={busType()} page='selectBusType' />
 			<div class='bus_list'>
 				{buses().filter(b => b.category === busType())
-					.map(bus => <BusBlock  {...bus} onClick={e => {
+					.map(bus => <BusBlock {...bus} onClick={e => {
 						setBus(bus.plateNumber)
-						setReports(
-							records.map(({plateNumber, miles, date}) => ({plateNumber, date, issues: [], inspectorName: mainInspector, miles}))
-							.filter(b => b.plateNumber === bus.plateNumber)
-						)
+						setReports(state.records.filter(b => b.plateNumber === bus.plateNumber))
 					}} />)}
 			</div>
 			<br /><br /><br />

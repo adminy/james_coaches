@@ -8,7 +8,7 @@ const goBack = (page) => {
 
 export default ({page}) => (
 	<div class='bus_header_button'>
-		<button onClick={e => goBack(page)}>
+		<button onMouseDown={e => goBack(page)}>
 			<i class='fa-sharp fa-solid fa-circle-left'></i>
 		</button>
 	</div>

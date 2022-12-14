@@ -2,7 +2,7 @@ import { Show } from 'solid-js'
 import { busType, setBusType, busImages } from './state'
 
 const BusType = ({name}) => (
-	<div onClick={e => setBusType(name)}>
+	<div onMouseDown={e => setBusType(name)}>
 		<img src={busImages[name]} alt={name} width='100%' />
 		<h3>{name}</h3>
 	</div>

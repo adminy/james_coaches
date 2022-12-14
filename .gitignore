@@ -3,4 +3,4 @@ dist
 .DS_Store
 .staticrypt.json
 .vscode
-.data.json
+categories.json

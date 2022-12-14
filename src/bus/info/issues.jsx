@@ -2,7 +2,7 @@ import { issueNumber, issues, setIssues, reportTypes } from '../state'
 
 const DeleteIssue = ({index}) => (
 	<div class='column'>
-		<button class="button is-small is-danger" onClick={e => {
+		<button class="button is-small is-danger" onMouseDown={e => {
 			setIssues(issues().filter((_, i) => i !== index))
 		}}><i class="fas fa-minus-circle"></i></button>
 	</div>
@@ -64,7 +64,7 @@ const Issues = () => (
 		{issues().map((o, i) => <Issue {...o} index={i} />)}
 		<div class='row' style='position: relative'>
 			<br /><br />
-			<button class='button is-success submit-button' onClick={e => {
+			<button class='button is-success submit-button' onMouseDown={e => {
 				setIssues(issues().concat([{checkNo: 62, description: ''}]))
 			}}><i class="fa-solid fa-plus" /><span> &nbsp;New Issue</span></button>
 			<br /><br />

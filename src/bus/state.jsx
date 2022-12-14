@@ -1,8 +1,13 @@
 import { createSignal } from 'solid-js'
+import localStorageProxy from 'local-storage-proxy'
 import CoachImg from '../../assets/coach.png'
 import DoubleDeckerImg from '../../assets/doubledecker.png'
 import MinibusImg from '../../assets/minibus.png'
-import {categories} from '../../.data.json'
+import categories from '../../categories.json'
+const sheetId = '0mt856nk1nrqb'
+const baseUrl = 'https://sheetdb.io/api/v1'
+
+const state = localStorageProxy('records', {defaults: {records: []}, lspReset: false})
 
 const busImages = {
 	Coaches: CoachImg,
@@ -117,11 +122,10 @@ const [issues, setIssues] = createSignal([])
 const [miles, setMiles] = createSignal('')
 const [inspectorName, setInspectorName] = createSignal(mainInspector)
 
-const initialReports = await Promise.resolve(
-	[]
-)
 
-const [reports, setReports] = createSignal(initialReports)
+!state.records.length && state.records.push(...(await (await fetch(`${baseUrl}/${sheetId}`)).json()).map(r => ({...r, issues: r.issues.split('\n')})))
+
+const [reports, setReports] = createSignal(state.records)
 
 const reportTypes = Object.entries(report)
 	.filter(([_, errors]) => Array.isArray(errors)).slice(0, -1)
@@ -134,5 +138,6 @@ export {
 	bus, setBus, busType, setBusType, edit, setEdit, reportTypes,
 	buses, setBuses, reportPage, setReportPage, issueNumber,
 	issues, setIssues, miles, setMiles, reports, setReports, 
-	inspectorName, setInspectorName, busImages, report
+	inspectorName, setInspectorName, busImages, report,
+	state, sheetId, baseUrl
 }
