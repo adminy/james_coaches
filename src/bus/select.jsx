@@ -34,7 +34,7 @@ const EditBuses = () => (
 				const category = select.options[select.selectedIndex].textContent
 				const model = div.childNodes[2]
 				const plate = div.childNodes[3]
-				setBuses(buses().concat([{plateNumber: plate.value, category, model: model.value}]))
+				setBuses(buses().concat([{plateNumber: plate.value, category, model: model.value, seats: 0, driver: ''}]))
 				plate.value = ''
 				model.value = ''
 			}}> <i class="fas fa-plus"></i> &nbsp; <i class="fas fa-bus"></i> &nbsp; Add Bus</button>
@@ -54,11 +54,13 @@ const DeleteBusButton = ({category, model, plateNumber}) => {
 	)
 }
 
-const BusBlock = ({category, model, plateNumber, onClick}) => (
+const BusBlock = ({category, model, plateNumber, seats, driver, onClick}) => (
 	<div>
 		<DeleteBusButton {...{plateNumber, category, model}} />
 		<img src={busImages[category]} width='100%' onMouseDown={onClick} />
 		<div class='subtitle' onMouseDown={onClick}>{model}</div>
+		<div class='subtitle' onMouseDown={onClick}>{seats ? <><i class="fad fa-ski-lift is-4"></i><span>{seats}</span></> : ''}</div>
+		<div class='subtitle' onMouseDown={onClick}>{driver}</div>
 		<div class='subtitle' onMouseDown={onClick}>{plateNumber}</div>
 	</div>
 )

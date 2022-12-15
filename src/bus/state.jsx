@@ -20,7 +20,7 @@ const [busType, setBusType] = createSignal(0)
 const [edit, setEdit] = createSignal(false)
 
 let initialBuses = await Promise.resolve(
-	Object.entries(categories).map(([category, buses]) => buses.map(({plateNumber, model, seats}) => ({plateNumber, model, seats, category}))).flat()
+	Object.entries(categories).map(([category, buses]) => buses.map(b => ({...b, category}))).flat()
 )
 
 const [buses, setBuses] = createSignal(initialBuses)
