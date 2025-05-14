@@ -1,9 +1,20 @@
 import { Show } from 'solid-js'
-import { busType, bus, setBus, edit, buses, setBuses, busImages, setReports, state } from './state'
+import { busType, bus, setBus, edit, buses, setBuses, busImages, setReports, state, sheetId } from './state'
 import BusHeader from './header'
 
-const deleteBus = busNo => {
-	setBuses(buses().filter(({plateNumber}) => plateNumber !== busNo))
+const busTypes = ['Coaches', 'Double Decker', 'Mini Bus']
+
+const deleteBus = async busNo => {
+	const newBuses = buses().filter(({plateNumber}) => plateNumber !== busNo)
+	setBuses(newBuses)
+	state.vehicles = newBuses
+	fetch(`https://sheetdb.io/api/v1/${sheetId}/plateNumber/${busNo}?sheet=vehicles`, {
+		method: 'DELETE',
+		headers: {
+			'Accept': 'application/json',
+			'Content-Type': 'application/json'
+		}
+	})
 }
 
 const BusType = () => (
@@ -13,9 +24,9 @@ const BusType = () => (
 		</span>
 		<span class="select is-large">
 			<select>
-				<option selected>Coaches</option>
-				<option>Double Decker</option>
-				<option>Mini Bus</option>
+				{busTypes.map(name => ((
+					<option selected={busType() === name}>{name}</option>
+				)))}
 			</select>
 		</span>
 	</div>
@@ -26,17 +37,34 @@ const EditBuses = () => (
 		<div class='control' style='position: relative;margin: 20px; border: 1px solid black'>
 			<div class='width: 200px'><BusType /></div>
 			
-			<input placeholder='Bus Model' class='input is-large' /><br />
 			<input placeholder='Bus Plate Number' class='input is-large' /><br />
+			<input placeholder='Bus Model' class='input is-large' /><br />
+			<input placeholder='Number of Seats' type="number" class='input is-large' /><br />
+			<input placeholder='Driver' class='input is-large' /><br />
 			<button class='input is-large has-background-info has-text-white add_bus' onMouseDown={e => {
 				const div = e.currentTarget.parentElement
 				const select = div.firstChild.firstChild.childNodes[1].firstChild
 				const category = select.options[select.selectedIndex].textContent
-				const model = div.childNodes[2]
-				const plate = div.childNodes[3]
-				setBuses(buses().concat([{plateNumber: plate.value, category, model: model.value, seats: 0, driver: ''}]))
+				const plate = div.childNodes[2]
+				const model = div.childNodes[3]
+				const seats = div.childNodes[4]
+				const driver = div.childNodes[5]
+				const newBus = {plateNumber: plate.value, category, model: model.value, seats: seats.value, driver: driver.value}
+				setBuses(buses().concat([newBus]))
+				state.vehicles.push(newBus)
 				plate.value = ''
 				model.value = ''
+				seats.value = undefined
+				driver.value = ''
+
+				fetch(`https://sheetdb.io/api/v1/${sheetId}?sheet=vehicles`, {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({data: [newBus]})
+				})
 			}}> <i class="fas fa-plus"></i> &nbsp; <i class="fas fa-bus"></i> &nbsp; Add Bus</button>
 			<br /><br /><br />
 		</div>
@@ -73,7 +101,9 @@ export default () => (
 				{buses().filter(b => b.category === busType())
 					.map(bus => <BusBlock {...bus} onClick={e => {
 						setBus(bus.plateNumber)
-						setReports(state.records.filter(b => b.plateNumber === bus.plateNumber))
+						const newRecords = state.records.filter(b => b.plateNumber === bus.plateNumber)
+						setReports(newRecords)
+						state.records = newRecords
 					}} />)}
 			</div>
 			<br /><br /><br />

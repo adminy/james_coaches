@@ -1,13 +1,12 @@
-import { createSignal } from 'solid-js'
+import { createSignal, createEffect } from 'solid-js'
 import localStorageProxy from 'local-storage-proxy'
 import CoachImg from '../../assets/coach.png'
 import DoubleDeckerImg from '../../assets/doubledecker.png'
 import MinibusImg from '../../assets/minibus.png'
-import categories from '../../categories.json'
 const sheetId = '0mt856nk1nrqb'
 const baseUrl = 'https://sheetdb.io/api/v1'
 
-const state = localStorageProxy('records', {defaults: {records: []}, lspReset: false})
+const state = localStorageProxy('records', {defaults: {records: [], vehicles: []}, lspReset: false})
 
 const busImages = {
 	Coaches: CoachImg,
@@ -18,12 +17,7 @@ const busImages = {
 const [bus, setBus] = createSignal(0)
 const [busType, setBusType] = createSignal(0)
 const [edit, setEdit] = createSignal(false)
-
-let initialBuses = await Promise.resolve(
-	Object.entries(categories).map(([category, buses]) => buses.map(b => ({...b, category}))).flat()
-)
-
-const [buses, setBuses] = createSignal(initialBuses)
+const [buses, setBuses] = createSignal(state.vehicles)
 
 export const mainInspector = 'Iurie Bivol'
 
@@ -122,8 +116,14 @@ const [issues, setIssues] = createSignal([])
 const [miles, setMiles] = createSignal('')
 const [inspectorName, setInspectorName] = createSignal(mainInspector)
 
-
-!state.records.length && state.records.push(...(await (await fetch(`${baseUrl}/${sheetId}`)).json()).map(r => ({...r, issues: r.issues.split('\n')})))
+createEffect(async () => {
+	if (!state.records.length) {
+		const records = (await (await fetch(`${baseUrl}/${sheetId}?sheet=records`)).json()).map(r => ({...r, issues: r.issues.split('\n')}))
+		const vehicles = (await (await fetch(`${baseUrl}/${sheetId}?sheet=vehicles`)).json())
+		state.records.push(...records)
+		state.vehicles.push(...vehicles)
+	}	
+})
 
 const [reports, setReports] = createSignal(state.records)
 
