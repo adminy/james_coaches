@@ -22,7 +22,8 @@ const Field = ({key, value}) => (
 const ReportBody = ({checkLocation, i, errors, issues}) => (
 	<div>
 		<div class='subtitle'>{String.fromCharCode('A'.charCodeAt() + i)}: {checkLocation}</div>
-		<table style='width:90%; margin: 20px'>
+		<div class='table-scroll'>
+		<table class='report-table'>
 		<thead>
 			<tr>{[
 				'Check No',
@@ -54,22 +55,23 @@ const ReportBody = ({checkLocation, i, errors, issues}) => (
 			})}
 		</tbody>
 	</table>
+	</div>
 </div>
 )
 
 const ReportInfo = ({date, issues, inspectorName, miles}) => (
-	<div style='margin: 20px'>
+	<div>
 
-		<div class='title'>Vehicle Inspection Report (PSV)</div>
-		<div class='columns is-mobile'>
+		<div class='section-title'>Vehicle Inspection Report (PSV)</div>
+		<div class='columns'>
 			<Field key='Operator' value='James Coaches' />
 			<Field key='Vehicle Reg/Fleet No' value={bus()} />
 		</div>
-        <div class='columns is-mobile'>
+        <div class='columns'>
 			<Field key='Odometer Reading' value={miles} />
 			<Field key='Vehicle Make/Model' value={busType() + ' - Unknown'} />
 		</div>
-        <div class='columns is-mobile'>			
+		<div class='columns'>
 			<Field key='Name of Inspector' value={inspectorName} />
 			<Field key='Date' value={date} />
 		</div>

@@ -1,12 +1,15 @@
-import { report, issues, setIssues, miles, setMiles, reports, setReports, inspectorName, setInspectorName, state, request, setApiError, bus } from '../state'
+import { createSignal } from 'solid-js'
+import { report, issues, setIssues, miles, setMiles, reports, setReports, inspectorName, setInspectorName, state, request, setApiError, bus, mainInspector } from '../state'
 import Field from './field'
-// import Issues from './issues'
 
-const finishReport = async e => {
-	const issueText = [...e.currentTarget.parentElement.parentElement.parentElement.childNodes][2].firstChild.value.split('\n') || issues()
+const [saving, setSaving] = createSignal(false)
+
+const finishReport = async () => {
+	if (saving()) return
+	setSaving(true)
 	const record = {
 		date: report.Date,
-		issues: issueText,
+		issues: issues().filter(Boolean),
 		inspectorName: inspectorName(),
 		miles: miles(),
 		plateNumber: bus()
@@ -18,6 +21,7 @@ const finishReport = async e => {
 		await request('', { method: 'POST', headers, body})
 	} catch (err) {
 		setApiError(err.message)
+		setSaving(false)
 		return
 	}
 
@@ -27,39 +31,30 @@ const finishReport = async e => {
 
 	// cleanup
 	setIssues([])
-	setInspectorName('Iurie Bivol')
+	setInspectorName(mainInspector)
 	setMiles('')
+	setSaving(false)
 }
 
-const ReportButton = () => (
-	<div class='row'>
-		<div class="control" style='margin: 20px; float: right'>
-			<button class="button has-primary-color submit-button"
-				onMouseDown={finishReport}
-				><i class="fa-solid fa-check"></i><span> &nbsp;Finished</span></button>
-			<br />
-		</div>
-	</div>
-)
-
 const NewReport = () => (
-	<div class='rows' style='border: 1px solid #ccc; border-radius: 10px; margin: 20px'>
-		<div class='row has-text-centered title'>Add new Report</div>
-		<div class='row'>
+	<form class='report-form' onSubmit={e => { e.preventDefault(); finishReport() }}>
+		<h3 class='section-title'>Add new report</h3>
+		<div class='form-grid'>
 			<Field name={inspectorName} setName={setInspectorName}
-				title='Inspector Name' placeholder='Inspector Name ...' />
+				title='Inspector name' placeholder='Inspector name ...' />
 			<Field name={miles} setName={setMiles} title='Miles' placeholder='123k' />
-			<br /><br />
 		</div>
-
-		<div class="row">
-			<textarea value={issues().join('\n')} onChange={e => setIssues(e.currentTarget.value.split('\n'))}
-				class="textarea" placeholder="Describe what you did ..." />
-			<hr />
+		<label class='field'>
+			<span class='field-label'>Issues / work done</span>
+			<textarea value={issues().join('\n')} onInput={e => setIssues(e.currentTarget.value.split('\n'))}
+				class='textarea' rows='5' placeholder='Describe what you did ...' />
+		</label>
+		<div class='form-actions'>
+			<button type='submit' class='btn-primary btn-block' disabled={saving()}>
+				<i class='fas fa-check' aria-hidden='true'></i> {saving() ? 'Saving…' : 'Finished'}
+			</button>
 		</div>
-
-		{/* <Issues /> */}
-		<ReportButton />
-	</div>
+	</form>
 )
+
 export default NewReport

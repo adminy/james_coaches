@@ -1,15 +1,13 @@
-import {setBus, setBusType, setReportPage} from '../state'
+import { setBus, setBusType, setReportPage } from '../state'
 
 const goBack = (page) => {
 	page === 'selectBus' && setBus(0)
-	page ==='selectBusType' && setBusType(0)
+	page === 'selectBusType' && setBusType(0)
 	page === 'infoPage' && setReportPage(false)
 }
 
 export default ({page}) => (
-	<div class='bus_header_button'>
-		<button onMouseDown={e => goBack(page)}>
-			<i class='fa-sharp fa-solid fa-circle-left'></i>
-		</button>
-	</div>
+	<button type='button' class='header-btn' aria-label='Go back' onClick={() => goBack(page)}>
+		<i class='fas fa-chevron-left' aria-hidden='true'></i>
+	</button>
 )

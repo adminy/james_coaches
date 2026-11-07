@@ -11,28 +11,37 @@ import { apiError, loadData } from './bus/state'
 
 const ApiError = () => (
 	<Show when={apiError()}>
-		<div class='notification is-danger' style='margin: 20px'>
+		<div class='api-banner' role='alert'>
 			<p><strong>SheetDB request failed:</strong> {apiError()}</p>
 			<p>
 				Re-authorise the Google connection for this API in the{' '}
 				<a href='https://sheetdb.io/app' target='_blank' rel='noreferrer'>SheetDB dashboard</a>,
 				then retry. If the API was recreated, update <code>sheetId</code> in <code>src/bus/state.jsx</code>.
 			</p>
-			<button class='button is-small' onClick={() => loadData()}>Retry</button>
+			<button type='button' class='btn-primary' onClick={() => loadData()}>Retry</button>
 		</div>
 	</Show>
 )
 
+const clearCache = () => {
+	if (!window.confirm('Clear cached data and reload?')) return
+	localStorage.clear()
+	location.reload()
+}
+
 const App = () => (
 	<div>
-		<header>
-			<div class='has-text-right'>
-				<button class='button' onClick="localStorage.clear()">
-					<i class="fad fa-sync-alt"></i>
+		<header class='app-header'>
+			<div class='app-header-inner'>
+				<img class='app-logo' src={BusImage} alt="James's Coaches" />
+				<div class='app-heading'>
+					<h1>Inspector Service</h1>
+					<p>James's Coaches</p>
+				</div>
+				<button type='button' class='icon-btn' aria-label='Clear cached data and reload' title='Clear cached data and reload' onClick={clearCache}>
+					<i class='fad fa-sync-alt' aria-hidden='true'></i>
 				</button>
 			</div>
-			<h1>Inspector Service</h1>
-			<img src={BusImage} style='height:70px' />
 		</header>
 		<main>
 			<ApiError />

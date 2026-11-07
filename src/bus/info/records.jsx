@@ -1,29 +1,27 @@
-import { setReportPage, reports, splitIssues } from '../state'
+import { Show } from 'solid-js'
+import { reports, splitIssues } from '../state'
 
-const header = ['Date', 'Checked By', 'Miles', /*'Issues'*/, 'Info'/*, 'View Report'*/]
+const header = ['Date', 'Checked By', 'Miles', 'Info']
 
 const BusPastRecords = () => (
-	<div>
-		<table style='width:90%; margin: 20px'>
-			<thead>
-				<tr>{header.map(title => <th><span>{title}</span></th>)}</tr>
-			</thead>
-			<tbody>
-				{reports().map(({date, issues, inspectorName, miles}) => (
-					<tr>
-						<td><span>{date}</span></td>
-						<td><span>{inspectorName}</span></td>
-						<td><span>{miles}</span></td>
-						{/* <td><span>{issues.length}</span></td> */}
-						<td><span>{splitIssues(issues).map((description) => <span>{description}<br /></span>)}</span></td>
-						
-						{/* <td><button class='button is-small is-info' onMouseDown={e => {
-							setReportPage({date, issues, inspectorName, miles})
-						}}>View</button></td> */}
-					</tr>
-				))}
-			</tbody>
-		</table>
+	<div class='records-wrap'>
+		<Show when={reports().length} fallback={<p class='empty-state'>No inspection reports for this vehicle yet.</p>}>
+			<table class='records-table'>
+				<thead>
+					<tr>{header.map(title => <th><span>{title}</span></th>)}</tr>
+				</thead>
+				<tbody>
+					{reports().map(({date, issues, inspectorName, miles}) => (
+						<tr>
+							<td data-label='Date'><span>{date}</span></td>
+							<td data-label='Checked by'><span>{inspectorName}</span></td>
+							<td data-label='Miles'><span>{miles}</span></td>
+							<td data-label='Info'><span>{splitIssues(issues).map((description) => <span>{description}<br /></span>)}</span></td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+		</Show>
 	</div>
 )
 

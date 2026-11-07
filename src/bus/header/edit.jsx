@@ -1,15 +1,15 @@
-import { createSignal } from 'solid-js'
 import { edit, setEdit } from '../state'
 
-const [icon, setIcon] = createSignal('fas fa-plus')
+const label = () => edit() ? 'Done editing vehicles' : 'Edit vehicles'
 
-export default ({}) => (
-	<div class='bus_header_button'>
-		<button onMouseDown={e => {
-			setEdit(!edit())
-			setIcon(edit() ? 'fas fa-minus' : 'fas fa-plus')
-		}} style={edit() && 'border: 3px solid red; animation: pulse 2s infinite;'}>
-			<i class={icon()}></i>
-		</button>
-	</div>
+export default () => (
+	<button
+		type='button'
+		class={`header-btn${edit() ? ' is-active' : ''}`}
+		aria-label={label()}
+		title={label()}
+		onClick={() => setEdit(!edit())}
+	>
+		<i class={edit() ? 'fas fa-check' : 'fas fa-pen'} aria-hidden='true'></i>
+	</button>
 )
