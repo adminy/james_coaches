@@ -1,4 +1,4 @@
-import { setReportPage, reports } from '../state'
+import { setReportPage, reports, splitIssues } from '../state'
 
 const header = ['Date', 'Checked By', 'Miles', /*'Issues'*/, 'Info'/*, 'View Report'*/]
 
@@ -15,7 +15,7 @@ const BusPastRecords = () => (
 						<td><span>{inspectorName}</span></td>
 						<td><span>{miles}</span></td>
 						{/* <td><span>{issues.length}</span></td> */}
-						<td><span>{issues.map((description) => <span>{description}<br /></span>)}</span></td>
+						<td><span>{splitIssues(issues).map((description) => <span>{description}<br /></span>)}</span></td>
 						
 						{/* <td><button class='button is-small is-info' onMouseDown={e => {
 							setReportPage({date, issues, inspectorName, miles})

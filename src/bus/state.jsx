@@ -116,16 +116,48 @@ const [issues, setIssues] = createSignal([])
 const [miles, setMiles] = createSignal('')
 const [inspectorName, setInspectorName] = createSignal(mainInspector)
 
-createEffect(async () => {
-	if (!state.records.length) {
-		const records = (await (await fetch(`${baseUrl}/${sheetId}?sheet=records`)).json()).map(r => ({...r, issues: r.issues.split('\n')}))
-		const vehicles = (await (await fetch(`${baseUrl}/${sheetId}?sheet=vehicles`)).json())
-		state.records.push(...records)
-		state.vehicles.push(...vehicles)
-	}	
-})
-
 const [reports, setReports] = createSignal(state.records)
+
+const splitIssues = issues => Array.isArray(issues)
+	? issues
+	: String(issues ?? '').split('\n').filter(Boolean)
+
+const [apiError, setApiError] = createSignal('')
+
+// SheetDB returns {"error": "..."} objects for 4xx/5xx responses, never arrays.
+const request = async (path, options) => {
+	const res = await fetch(`${baseUrl}/${sheetId}${path}`, options)
+	const body = await res.json().catch(() => null)
+	if (!res.ok) throw new Error(body?.error || `${res.status} ${res.statusText}`)
+	if (body === null) throw new Error(`Empty response from SheetDB (${res.status})`)
+	return body
+}
+
+const loadData = async () => {
+	const jobs = []
+	if (!state.records.length) {
+		jobs.push(request('?sheet=records').then(rows => {
+			if (!Array.isArray(rows)) throw new Error('Unexpected records response from SheetDB')
+			state.records.push(...rows.map(row => ({...row, issues: splitIssues(row.issues)})))
+			setReports([...state.records])
+		}))
+	}
+	if (!state.vehicles.length) {
+		jobs.push(request('?sheet=vehicles').then(rows => {
+			if (!Array.isArray(rows)) throw new Error('Unexpected vehicles response from SheetDB')
+			state.vehicles.push(...rows)
+			setBuses([...state.vehicles])
+		}))
+	}
+	try {
+		await Promise.all(jobs)
+		setApiError('')
+	} catch (err) {
+		setApiError(err.message)
+	}
+}
+
+createEffect(() => { loadData() })
 
 const reportTypes = Object.entries(report)
 	.filter(([_, errors]) => Array.isArray(errors)).slice(0, -1)
@@ -139,5 +171,6 @@ export {
 	buses, setBuses, reportPage, setReportPage, issueNumber,
 	issues, setIssues, miles, setMiles, reports, setReports, 
 	inspectorName, setInspectorName, busImages, report,
-	state, sheetId, baseUrl
+	state, sheetId, baseUrl, request, loadData, splitIssues,
+	apiError, setApiError
 }

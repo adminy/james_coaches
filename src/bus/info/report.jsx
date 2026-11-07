@@ -1,8 +1,8 @@
-import { report, issues, setIssues, miles, setMiles, reports, setReports, inspectorName, setInspectorName, state, baseUrl, sheetId, bus } from '../state'
+import { report, issues, setIssues, miles, setMiles, reports, setReports, inspectorName, setInspectorName, state, request, setApiError, bus } from '../state'
 import Field from './field'
 // import Issues from './issues'
 
-const finishReport = e => {
+const finishReport = async e => {
 	const issueText = [...e.currentTarget.parentElement.parentElement.parentElement.childNodes][2].firstChild.value.split('\n') || issues()
 	const record = {
 		date: report.Date,
@@ -12,13 +12,18 @@ const finishReport = e => {
 		plateNumber: bus()
 	}
 	const body = JSON.stringify({ data: {...record, issues: record.issues.join('\n') } })
-	console.log(record, body)
 	const headers = { Accept: 'application/json', 'Content-Type': 'application/json' }
 
-	fetch(`${baseUrl}/${sheetId}`, { method: 'POST', headers, body}).then(res => res.json()).then(console.log)
+	try {
+		await request('', { method: 'POST', headers, body})
+	} catch (err) {
+		setApiError(err.message)
+		return
+	}
 
-	state.records.push(record)
 	setReports(reports().concat([record]))
+	state.records.push(record)
+	setApiError('')
 
 	// cleanup
 	setIssues([])
