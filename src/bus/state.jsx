@@ -1,4 +1,4 @@
-import { createSignal, createEffect } from 'solid-js'
+import { createSignal } from 'solid-js'
 import localStorageProxy from 'local-storage-proxy'
 import CoachImg from '../../assets/coach.png'
 import DoubleDeckerImg from '../../assets/doubledecker.png'
@@ -156,8 +156,6 @@ const loadData = async () => {
 		setApiError(err.message)
 	}
 }
-
-createEffect(() => { loadData() })
 
 const reportTypes = Object.entries(report)
 	.filter(([_, errors]) => Array.isArray(errors)).slice(0, -1)

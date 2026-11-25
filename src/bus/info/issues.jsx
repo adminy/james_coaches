@@ -9,15 +9,13 @@ const DeleteIssue = ({index}) => (
 )
 
 const changeIssueType = (e, index) => {
-	const issuez = issues()
-	issuez[index].checkNo = e.currentTarget.selectedIndex
-	setIssues(issuez)
+	const checkNo = e.currentTarget.selectedIndex
+	setIssues(issues().map((issue, i) => i === index ? {...issue, checkNo} : issue))
 }
 
 const updateIssueDesc = (e, index) => {
-	const issuez = issues()
-	issuez[index].description = e.currentTarget.value
-	setIssues(issuez)
+	const description = e.currentTarget.value
+	setIssues(issues().map((issue, i) => i === index ? {...issue, description} : issue))
 }
 
 const IssueGroup = ({errorName, errors, i, checkNo}) => (

@@ -1,5 +1,5 @@
-import { render } from 'solid-js/web'
-import { Show } from 'solid-js'
+import { render } from '@solidjs/web'
+import { Show, onSettled } from 'solid-js'
 import 'bulma/css/bulma.min.css'
 import './style.css'
 import BusTypes from './bus/type'
@@ -29,7 +29,9 @@ const clearCache = () => {
 	location.reload()
 }
 
-const App = () => (
+const App = () => {
+	onSettled(() => { loadData() })
+	return (
 	<div>
 		<header class='app-header'>
 			<div class='app-header-inner'>
@@ -51,7 +53,8 @@ const App = () => (
 			<ReportPage />
 		</main>
 	</div>
-)
+	)
+}
 
 const root = document.getElementById('root')
 render(() => <App />, root)

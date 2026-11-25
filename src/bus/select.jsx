@@ -48,7 +48,7 @@ const addBus = async e => {
 	setBusType(newBus.category)
 	setApiError('')
 	form.reset()
-	form.querySelector('[name=category]').value = busType()
+	form.querySelector('[name=category]').value = newBus.category
 }
 
 const EditBuses = () => (
